@@ -34,7 +34,6 @@ export let loader: LoaderFunction = async ({ request }) => {
   return withUser(request, (session, user) => {
     return withLocale(request, async (locales) => {
       const sessionDetails = await session.getSessionDetails()
-      console.log(sessionDetails)
 
       return {
         user,
