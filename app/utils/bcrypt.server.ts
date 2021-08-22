@@ -2,7 +2,7 @@ import { compare, hash } from 'bcrypt'
 import { getFromEnv } from './misc.server'
 
 const generateHash = async (password: string) => {
-  return hash(password, getFromEnv('HASH_ROUNDS'))
+  return hash(password, Number(getFromEnv('HASH_ROUNDS')))
 }
 
 const compareHash = async (password: string, hash: string) => {
