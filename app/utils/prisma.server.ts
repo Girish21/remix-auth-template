@@ -5,10 +5,38 @@ import { sessionExpirationTime } from './session.server'
 const geExpirationDate = () => new Date(Date.now() + sessionExpirationTime)
 
 const getUserFromSessionId = async (id: string) => {
-  return prisma.session.findUnique({
+  const data = await prisma.session.findUnique({
     where: { id },
-    select: { user: { select: { email: true, id: true, firstName: true } } },
+    select: {
+      expirationDate: true,
+      id: true,
+      user: { select: { email: true, id: true, firstName: true } },
+    },
   })
+
+  if (!data) {
+    throw new Error('session does not exist')
+  }
+
+  if (Date.now() > data.expirationDate.getTime()) {
+    await prisma.session.delete({ where: { id } })
+    throw new Error('session expired, login again')
+  }
+
+  const twoWeeks = 1000 * 60 * 60 * 24 * 7 * 2
+  console.log(data.expirationDate.getTime(), Date.now() + twoWeeks)
+  if (data.expirationDate.getTime() < Date.now() + twoWeeks) {
+    const newExpirationDate = new Date(data.expirationDate.getTime() + twoWeeks)
+    await prisma.session.update({
+      where: { id },
+      data: {
+        expirationDate: newExpirationDate,
+      },
+    })
+    console.log('updated')
+  }
+
+  return { user: data.user }
 }
 
 const createUserIfNotExist = async (

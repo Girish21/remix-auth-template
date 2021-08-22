@@ -122,7 +122,8 @@ const withUser = async (
   const user = await session.getUser()
 
   if (!user) {
-    return redirect('/login')
+    session.unsetSessionId()
+    return redirect('/login', { headers: await session.getHeaders() })
   }
 
   return next(session, user.user)
