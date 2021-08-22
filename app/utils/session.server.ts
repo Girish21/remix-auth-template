@@ -12,6 +12,7 @@ import { getFromEnv } from './misc.server'
 import {
   createSession,
   deleteSession,
+  getSessionDetails,
   getUserFromSessionId,
 } from './prisma.server'
 
@@ -27,6 +28,10 @@ type SessionType = {
   getHeaders: (
     headers?: ResponseInit['headers'] | undefined
   ) => Promise<HeadersInit>
+  getSessionDetails: () => Promise<{
+    createdAt: Date
+    expirationDate: Date
+  } | null>
   getUser: () => Promise<{
     user: SharableUserType
   } | null>
@@ -76,6 +81,12 @@ const getUserSession = async (request: Request): Promise<SessionType> => {
       }
 
       return headers
+    },
+    getSessionDetails: async () => {
+      const sessionId = getSessionId()
+      if (!sessionId) return null
+
+      return getSessionDetails(sessionId)
     },
     getUser: async (): Promise<{
       user: SharableUserType

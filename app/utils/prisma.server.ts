@@ -24,7 +24,6 @@ const getUserFromSessionId = async (id: string) => {
   }
 
   const twoWeeks = 1000 * 60 * 60 * 24 * 7 * 2
-  console.log(data.expirationDate.getTime(), Date.now() + twoWeeks)
   if (data.expirationDate.getTime() < Date.now() + twoWeeks) {
     const newExpirationDate = new Date(data.expirationDate.getTime() + twoWeeks)
     await prisma.session.update({
@@ -33,10 +32,16 @@ const getUserFromSessionId = async (id: string) => {
         expirationDate: newExpirationDate,
       },
     })
-    console.log('updated')
   }
 
   return { user: data.user }
+}
+
+const getSessionDetails = async (id: string) => {
+  return prisma.session.findUnique({
+    where: { id },
+    select: { createdAt: true, expirationDate: true },
+  })
 }
 
 const createUserIfNotExist = async (
@@ -86,6 +91,7 @@ export {
   createSession,
   createUserIfNotExist,
   deleteSession,
+  getSessionDetails,
   getUserFromEmail,
   getUserFromSessionId,
 }
