@@ -1,17 +1,31 @@
 import * as React from 'react'
 import { Outlet } from 'react-router-dom'
-import type { LinksFunction } from 'remix'
+import { LinksFunction, LoaderFunction, useRouteData } from 'remix'
 import { Links, LiveReload, Meta, Scripts } from 'remix'
 import stylesUrl from './styles/global.css'
 import navStylesUrl from './styles/nav.css'
 
 import Nav from './components/nav'
+import { getUserSession } from './utils/session.server'
+
+type RouteData = {
+  isLoggedin: boolean
+}
 
 export let links: LinksFunction = () => {
   return [
     { rel: 'stylesheet', href: stylesUrl },
     { rel: 'stylesheet', href: navStylesUrl },
   ]
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const userSession = await getUserSession(request)
+
+  const user = await userSession.getUser()
+  const isLoggedin = !!user
+
+  return { isLoggedin }
 }
 
 function Document({ children }: { children: React.ReactNode }) {
@@ -34,9 +48,11 @@ function Document({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const data = useRouteData<RouteData>()
+
   return (
     <Document>
-      <Nav />
+      <Nav isLoggedin={data.isLoggedin} />
       <Outlet />
     </Document>
   )

@@ -8,8 +8,8 @@ import { withUser } from '../utils/session.server'
 
 export let meta: MetaFunction = () => {
   return {
-    title: 'Remix Starter',
-    description: 'Welcome to remix!',
+    title: 'awesome app!',
+    description: 'welcome to the awesome app!',
   }
 }
 

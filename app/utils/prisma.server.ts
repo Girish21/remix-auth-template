@@ -7,7 +7,7 @@ const geExpirationDate = () => new Date(Date.now() + sessionExpirationTime)
 const getUserFromSessionId = async (id: string) => {
   return prisma.session.findUnique({
     where: { id },
-    select: { user: true },
+    select: { user: { select: { email: true, id: true, firstName: true } } },
   })
 }
 

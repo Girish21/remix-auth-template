@@ -23,7 +23,8 @@
   justify-content: space-around;
 }
 
-.header_wrapper nav > a {
+.header_wrapper nav > a,
+.header_wrapper nav form button {
   padding-bottom: 4px;
   color: var(--text);
   background-image: linear-gradient(var(--text), var(--text));
@@ -31,13 +32,15 @@
   background-size: 0% 3px;
   background-position: left bottom;
   transition: background-size 300ms ease-out;
+  font-size: 1rem;
 }
 
-.header_wrapper nav > a:not(:first-child) {
+.header_wrapper nav > *:not(:first-child) {
   margin-left: 1rem;
 }
 
 .header_wrapper nav > a:hover,
-.header_wrapper nav > a.active {
+.header_wrapper nav > a.active,
+.header_wrapper nav form button:hover {
   background-size: 100% 3px;
 }
