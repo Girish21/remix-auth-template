@@ -16,7 +16,7 @@ import authStylesUrl from '../styles/auth.css'
 import cardStylesUrl from '../styles/card.css'
 import { getLoginSession } from '../utils/auth.server'
 import { createUserIfNotExist } from '../utils/prisma.server'
-import { getUserSession } from '../utils/session.server'
+import { authRoute, getUserSession } from '../utils/session.server'
 import { validateSignup } from '../utils/validation.server'
 
 type RouteData = {
@@ -79,18 +79,21 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const loginSession = await getLoginSession(request)
-  return json(
-    {
-      email: loginSession.getEmail(),
-      errors: loginSession.getErrors(),
-      message: loginSession.getMessage(),
-      name: loginSession.getName(),
-    } as RouteData,
-    {
-      headers: await loginSession.getHeaders(),
-    }
-  )
+  return authRoute(request, async () => {
+    const loginSession = await getLoginSession(request)
+
+    return json(
+      {
+        email: loginSession.getEmail(),
+        errors: loginSession.getErrors(),
+        message: loginSession.getMessage(),
+        name: loginSession.getName(),
+      } as RouteData,
+      {
+        headers: await loginSession.getHeaders(),
+      }
+    )
+  })
 }
 
 const Signup = () => {

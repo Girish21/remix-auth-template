@@ -128,4 +128,19 @@ const withUser = async (
   return next(session, user.user)
 }
 
-export { getUserSession, sessionExpirationTime, withUser }
+const authRoute = async (
+  request: Request,
+  next: () => ReturnType<LoaderFunction>
+): Promise<ReturnType<LoaderFunction>> => {
+  const userSession = await getUserSession(request)
+
+  const session = userSession.getSessionId()
+
+  if (session) {
+    return redirect('/')
+  }
+
+  return next()
+}
+
+export { authRoute, getUserSession, sessionExpirationTime, withUser }

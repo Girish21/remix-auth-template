@@ -19,7 +19,7 @@ import authStylesUrl from '../styles/auth.css'
 import cardStylesUrl from '../styles/card.css'
 import { getUserFromEmail } from '../utils/prisma.server'
 import { compareHash } from '../utils/bcrypt.server'
-import { getUserSession } from '../utils/session.server'
+import { authRoute, getUserSession } from '../utils/session.server'
 import ErrorText from '../components/error'
 
 type RouteData = {
@@ -85,16 +85,18 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const loginSession = await getLoginSession(request)
+  return authRoute(request, async () => {
+    const loginSession = await getLoginSession(request)
 
-  return json(
-    {
-      message: loginSession.getMessage(),
-      errors: loginSession.getErrors(),
-      email: loginSession.getEmail(),
-    },
-    { headers: await loginSession.getHeaders() }
-  )
+    return json(
+      {
+        message: loginSession.getMessage(),
+        errors: loginSession.getErrors(),
+        email: loginSession.getEmail(),
+      },
+      { headers: await loginSession.getHeaders() }
+    )
+  })
 }
 
 const Login = () => {
