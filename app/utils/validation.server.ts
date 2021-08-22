@@ -58,16 +58,14 @@ const validateLogin = async (
 ): Promise<LoginValidationReturn> => {
   const errors: Record<string, string[]> = {}
 
-  const email = await validationHelper(
-    'email',
-    emailValidation.validate(data.email),
-    errors
-  )
-  const password = await validationHelper(
-    'password',
-    passwordValidation.validate(data.password),
-    errors
-  )
+  const [email, password] = await Promise.all([
+    validationHelper('email', emailValidation.validate(data.email), errors),
+    validationHelper(
+      'password',
+      passwordValidation.validate(data.password),
+      errors
+    ),
+  ])
 
   if (Object.keys(errors).length > 0) {
     return {
@@ -87,21 +85,15 @@ const validateSignup = async (
 ): Promise<SignupValidationReturn> => {
   const errors: Record<string, string[]> = {}
 
-  const email = await validationHelper(
-    'email',
-    emailValidation.validate(data.email),
-    errors
-  )
-  const password = await validationHelper(
-    'password',
-    passwordValidation.validate(data.password),
-    errors
-  )
-  const name = await validationHelper(
-    'name',
-    nameValidation.validate(data.name),
-    errors
-  )
+  const [email, password, name] = await Promise.all([
+    validationHelper('email', emailValidation.validate(data.email), errors),
+    validationHelper(
+      'password',
+      passwordValidation.validate(data.password),
+      errors
+    ),
+    validationHelper('name', nameValidation.validate(data.name), errors),
+  ])
 
   if (Object.keys(errors).length > 0) {
     return { type: 'error', errors }
