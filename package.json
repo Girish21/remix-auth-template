@@ -10,7 +10,7 @@
     "migration:dev": "prisma migrate dev",
     "migration:setup": "prisma migrate reset --force",
     "start": "remix-serve build",
-    "setup:dev": "docker-compose up -d && npm run migration:dev && npm run dev",
+    "setup:dev": "docker-compose up -d && npm run migration:dev && npm run watch",
     "setup": "npm i && docker-compose up -d && npm run migration:setup && npm run dev",
     "watch:css": "postcss styles --base styles --dir app/styles -w",
     "watch": "concurrently \"npm:watch:css\" \"npm:dev\""
