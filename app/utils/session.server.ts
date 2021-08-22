@@ -1,5 +1,12 @@
 import type { User } from '@prisma/client'
-import { ResponseInit, Request, LoaderFunction, Session, redirect } from 'remix'
+import {
+  HeadersInit,
+  ResponseInit,
+  Request,
+  LoaderFunction,
+  Session,
+  redirect,
+} from 'remix'
 import { createCookieSessionStorage, Headers } from 'remix'
 import { getFromEnv } from './misc.server'
 import {
@@ -10,6 +17,22 @@ import {
 
 const sessionExpirationTime = 1000 * 60 * 60 * 24 * 30
 const sessionIdKey = '__session_id__'
+
+type SharableUserType = Pick<User, 'email' | 'firstName' | 'id'>
+type SessionType = {
+  commit: () => Promise<string | null>
+  getSessionId: () => string | undefined
+  session: Session
+  unsetSessionId: () => void
+  getHeaders: (
+    headers?: ResponseInit['headers'] | undefined
+  ) => Promise<HeadersInit>
+  getUser: () => Promise<{
+    user: SharableUserType
+  } | null>
+  signIn: (id: string) => Promise<void>
+  signOut: () => Promise<void>
+}
 
 const { commitSession, getSession } = createCookieSessionStorage({
   cookie: {
@@ -23,7 +46,7 @@ const { commitSession, getSession } = createCookieSessionStorage({
   },
 })
 
-const getUserSession = async (request: Request) => {
+const getUserSession = async (request: Request): Promise<SessionType> => {
   const session = await getSession(request.headers.get('Cookie'))
   const initialValues = await commitSession(session)
 
@@ -54,7 +77,9 @@ const getUserSession = async (request: Request) => {
 
       return headers
     },
-    getUser: async (): Promise<{ user: User } | null> => {
+    getUser: async (): Promise<{
+      user: SharableUserType
+    } | null> => {
       const id = getSessionId()
       if (!id) return null
 
@@ -88,8 +113,11 @@ const getUserSession = async (request: Request) => {
 
 const withUser = async (
   request: Request,
-  next: (session: Session, user: User) => ReturnType<LoaderFunction>
-) => {
+  next: (
+    session: SessionType,
+    user: SharableUserType
+  ) => ReturnType<LoaderFunction>
+): Promise<ReturnType<LoaderFunction>> => {
   const session = await getUserSession(request)
   const user = await session.getUser()
 
@@ -97,7 +125,7 @@ const withUser = async (
     return redirect('/login')
   }
 
-  return next(session.session, user.user)
+  return next(session, user.user)
 }
 
 export { getUserSession, sessionExpirationTime, withUser }
