@@ -56,17 +56,21 @@ export default function Index() {
               👋
             </span>
             <h1>hi {data.user.firstName}</h1>
-            <div className='row session-text'>
-              session started at:{' '}
-              {new Intl.DateTimeFormat(data.locales).format(
-                new Date(data.sessionDetails.createdAt).getTime()
-              )}
+            <div className='row'>
+              <span className='session-text'>
+                session started at:{' '}
+                {new Intl.DateTimeFormat(data.locales).format(
+                  new Date(data.sessionDetails.createdAt).getTime()
+                )}
+              </span>
             </div>
-            <div className='row session-text'>
-              session valid till:{' '}
-              {new Intl.DateTimeFormat(data.locales).format(
-                new Date(data.sessionDetails.expirationDate).getTime()
-              )}
+            <div className='row'>
+              <span className='session-text'>
+                session valid till:{' '}
+                {new Intl.DateTimeFormat(data.locales).format(
+                  new Date(data.sessionDetails.expirationDate).getTime()
+                )}
+              </span>
             </div>
           </div>
         </section>
