@@ -5,12 +5,20 @@ type LoginData = {
   password: string | null
 }
 
+type SignupData = LoginData & { name: string | null }
+
+type Errors = {
+  type: 'error'
+  errors: Record<string, string[]>
+}
+
 type LoginValidationReturn =
-  | {
-      type: 'error'
-      errors: Record<string, string[]>
-    }
+  | Errors
   | { type: 'success'; data: { email: string; password: string } }
+
+type SignupValidationReturn =
+  | Errors
+  | { type: 'success'; data: { email: string; password: string; name: string } }
 
 const emailValidation = yup
   .string()
@@ -28,26 +36,39 @@ const passwordValidation = yup
     }
   )
 
+const nameValidation = yup.string().required('name is required')
+
 const loginSchema = yup.object().shape({
   email: emailValidation,
   password: passwordValidation,
 })
+
+const validationHelper = async (
+  key: string,
+  validation: Promise<string>,
+  errors: Record<string, string[]>
+) => {
+  return (await validation.catch((e: yup.ValidationError) => {
+    errors[key] = e.errors
+  })) as string
+}
 
 const validateLogin = async (
   data: LoginData
 ): Promise<LoginValidationReturn> => {
   const errors: Record<string, string[]> = {}
 
-  const email = (await emailValidation
-    .validate(data.email)
-    .catch((e: yup.ValidationError) => {
-      errors['email'] = e.errors
-    })) as string
-  const password = (await passwordValidation
-    .validate(data.password)
-    .catch((e: yup.ValidationError) => {
-      errors['password'] = e.errors
-    })) as string
+  const email = await validationHelper(
+    'email',
+    emailValidation.validate(data.email),
+    errors
+  )
+  const password = await validationHelper(
+    'password',
+    passwordValidation.validate(data.password),
+    errors
+  )
+
   if (Object.keys(errors).length > 0) {
     return {
       type: 'error',
@@ -61,4 +82,42 @@ const validateLogin = async (
   }
 }
 
-export { emailValidation, loginSchema, passwordValidation, validateLogin }
+const validateSignup = async (
+  data: SignupData
+): Promise<SignupValidationReturn> => {
+  const errors: Record<string, string[]> = {}
+
+  const email = await validationHelper(
+    'email',
+    emailValidation.validate(data.email),
+    errors
+  )
+  const password = await validationHelper(
+    'password',
+    passwordValidation.validate(data.password),
+    errors
+  )
+  const name = await validationHelper(
+    'name',
+    nameValidation.validate(data.name),
+    errors
+  )
+
+  if (Object.keys(errors).length > 0) {
+    return { type: 'error', errors }
+  }
+
+  return {
+    type: 'success',
+    data: { email, name, password },
+  }
+}
+
+export {
+  emailValidation,
+  loginSchema,
+  nameValidation,
+  passwordValidation,
+  validateLogin,
+  validateSignup,
+}
