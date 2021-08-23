@@ -2,8 +2,8 @@ import * as React from 'react'
 import { Outlet } from 'react-router-dom'
 import { LinksFunction, LoaderFunction, useRouteData } from 'remix'
 import { Links, LiveReload, Meta, Scripts } from 'remix'
+import appUrl from './styles/app.css'
 import stylesUrl from './styles/global.css'
-import navStylesUrl from './styles/nav.css'
 
 import Nav from './components/nav'
 import { getUserSession } from './utils/session.server'
@@ -14,8 +14,8 @@ type RouteData = {
 
 export let links: LinksFunction = () => {
   return [
+    { rel: 'stylesheet', href: appUrl },
     { rel: 'stylesheet', href: stylesUrl },
-    { rel: 'stylesheet', href: navStylesUrl },
   ]
 }
 
