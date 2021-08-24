@@ -1,11 +1,5 @@
 import * as React from 'react'
-import {
-  ActionFunction,
-  json,
-  LinksFunction,
-  LoaderFunction,
-  redirect,
-} from 'remix'
+import { ActionFunction, json, LoaderFunction, redirect } from 'remix'
 import { useRouteData } from 'remix'
 import { Form, MetaFunction } from 'remix'
 
@@ -14,11 +8,12 @@ import Input from '../components/input'
 import SubmitButton from '../components/submit-button'
 import AppContainer from '../components/container'
 
-import cardStylesUrl from '../styles/card.css'
 import { getLoginSession } from '../utils/auth.server'
 import { createUserIfNotExist } from '../utils/prisma.server'
 import { authRoute, getUserSession } from '../utils/session.server'
 import { validateSignup } from '../utils/validation.server'
+import { AuthCard } from '../components/card'
+import { H2 } from '../components/title'
 
 type RouteData = {
   email?: string
@@ -32,10 +27,6 @@ export const meta: MetaFunction = () => {
     title: 'signup',
     description: 'join this awesome app!',
   }
-}
-
-export const links: LinksFunction = () => {
-  return [{ rel: 'stylesheet', href: cardStylesUrl }]
 }
 
 export const action: ActionFunction = async ({ request }) => {
@@ -99,8 +90,8 @@ const Signup = () => {
   return (
     <AppContainer>
       <h1 className='sr-only'>join our awesome app!</h1>
-      <section className='card'>
-        <h2>sign up</h2>
+      <AuthCard>
+        <H2 className='text-center'>sign up</H2>
         <Form method='post' replace autoComplete='off' className='space-y-4'>
           <Input
             id='new-name'
@@ -129,7 +120,7 @@ const Signup = () => {
           {data.message && <ErrorText>{data.message}</ErrorText>}
           <SubmitButton type='submit'>Submit</SubmitButton>
         </Form>
-      </section>
+      </AuthCard>
     </AppContainer>
   )
 }

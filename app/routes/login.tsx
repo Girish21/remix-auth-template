@@ -1,6 +1,5 @@
 import {
   MetaFunction,
-  LinksFunction,
   ActionFunction,
   redirect,
   LoaderFunction,
@@ -15,22 +14,19 @@ import Input from '../components/input'
 import { validateLogin } from '../utils/validation.server'
 import { getLoginSession } from '../utils/auth.server'
 
-import cardStylesUrl from '../styles/card.css'
 import { getUserFromEmail } from '../utils/prisma.server'
 import { compareHash } from '../utils/bcrypt.server'
 import { authRoute, getUserSession } from '../utils/session.server'
 import ErrorText from '../components/error'
 import SubmitButton from '../components/submit-button'
 import AppContainer from '../components/container'
+import { AuthCard } from '../components/card'
+import { H2 } from '../components/title'
 
 type RouteData = {
   email?: string
   errors?: Record<string, string[]>
   message?: string
-}
-
-export const links: LinksFunction = () => {
-  return [{ rel: 'stylesheet', href: cardStylesUrl }]
 }
 
 export const meta: MetaFunction = () => {
@@ -102,8 +98,8 @@ const Login = () => {
   return (
     <AppContainer>
       <h1 className='sr-only'>login of awesome app!</h1>
-      <section className='card'>
-        <h2>login</h2>
+      <AuthCard>
+        <H2 className='text-center'>login</H2>
         <Form method='post' replace autoComplete='off' className='space-y-4'>
           <Input
             id='new-email'
@@ -124,7 +120,7 @@ const Login = () => {
           {data.message && <ErrorText>{data.message}</ErrorText>}
           <SubmitButton type='submit'>submit</SubmitButton>
         </Form>
-      </section>
+      </AuthCard>
     </AppContainer>
   )
 }
