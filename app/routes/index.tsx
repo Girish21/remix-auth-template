@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { MetaFunction, LinksFunction, LoaderFunction } from 'remix'
 import { useRouteData } from 'remix'
+import AppContainer from '../components/container'
 
 import stylesUrl from '../styles/index.css'
 import { withLocale } from '../utils/locale.server'
@@ -48,7 +49,7 @@ export default function Index() {
   const data = useRouteData<RouteData>()
 
   return (
-    <div className='container'>
+    <AppContainer>
       <main>
         <section className='user-banner'>
           <div className='grid'>
@@ -75,6 +76,6 @@ export default function Index() {
           </div>
         </section>
       </main>
-    </div>
+    </AppContainer>
   )
 }

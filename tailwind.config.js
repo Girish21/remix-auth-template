@@ -5,6 +5,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundSize: {
+        'button-gradient': '200% auto',
         'nav-link': '0% 3px',
         'nav-link-hover': '100% 3px',
       },

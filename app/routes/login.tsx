@@ -15,12 +15,13 @@ import Input from '../components/input'
 import { validateLogin } from '../utils/validation.server'
 import { getLoginSession } from '../utils/auth.server'
 
-import authStylesUrl from '../styles/auth.css'
 import cardStylesUrl from '../styles/card.css'
 import { getUserFromEmail } from '../utils/prisma.server'
 import { compareHash } from '../utils/bcrypt.server'
 import { authRoute, getUserSession } from '../utils/session.server'
 import ErrorText from '../components/error'
+import SubmitButton from '../components/submit-button'
+import AppContainer from '../components/container'
 
 type RouteData = {
   email?: string
@@ -29,11 +30,7 @@ type RouteData = {
 }
 
 export const links: LinksFunction = () => {
-  return [
-    { rel: 'stylesheet', href: cardStylesUrl },
-    { rel: 'stylesheet', href: authStylesUrl },
-    { rel: 'stylesheet', href: Input.stylesUrl },
-  ]
+  return [{ rel: 'stylesheet', href: cardStylesUrl }]
 }
 
 export const meta: MetaFunction = () => {
@@ -103,11 +100,11 @@ const Login = () => {
   const data = useRouteData<RouteData>()
 
   return (
-    <main>
+    <AppContainer>
       <h1 className='sr-only'>login of awesome app!</h1>
       <section className='card'>
         <h2>login</h2>
-        <Form method='post' replace autoComplete='off'>
+        <Form method='post' replace autoComplete='off' className='space-y-4'>
           <Input
             id='new-email'
             name='email'
@@ -124,15 +121,11 @@ const Login = () => {
             required
             errorText={data.errors?.['password']}
           />
-          {data.message && (
-            <div className='error-container'>
-              <ErrorText>{data.message}</ErrorText>
-            </div>
-          )}
-          <button type='submit'>Submit</button>
+          {data.message && <ErrorText>{data.message}</ErrorText>}
+          <SubmitButton type='submit'>submit</SubmitButton>
         </Form>
       </section>
-    </main>
+    </AppContainer>
   )
 }
 

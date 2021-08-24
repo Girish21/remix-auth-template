@@ -11,8 +11,9 @@ import { Form, MetaFunction } from 'remix'
 
 import ErrorText from '../components/error'
 import Input from '../components/input'
+import SubmitButton from '../components/submit-button'
+import AppContainer from '../components/container'
 
-import authStylesUrl from '../styles/auth.css'
 import cardStylesUrl from '../styles/card.css'
 import { getLoginSession } from '../utils/auth.server'
 import { createUserIfNotExist } from '../utils/prisma.server'
@@ -34,11 +35,7 @@ export const meta: MetaFunction = () => {
 }
 
 export const links: LinksFunction = () => {
-  return [
-    { rel: 'stylesheet', href: cardStylesUrl },
-    { rel: 'stylesheet', href: authStylesUrl },
-    { rel: 'stylesheet', href: Input.stylesUrl },
-  ]
+  return [{ rel: 'stylesheet', href: cardStylesUrl }]
 }
 
 export const action: ActionFunction = async ({ request }) => {
@@ -100,11 +97,11 @@ const Signup = () => {
   const data = useRouteData<RouteData>()
 
   return (
-    <main>
+    <AppContainer>
       <h1 className='sr-only'>join our awesome app!</h1>
       <section className='card'>
         <h2>sign up</h2>
-        <Form method='post' replace autoComplete='off'>
+        <Form method='post' replace autoComplete='off' className='space-y-4'>
           <Input
             id='new-name'
             name='name'
@@ -129,15 +126,11 @@ const Signup = () => {
             required
             errorText={data.errors?.['password']}
           />
-          {data.message && (
-            <div className='error-container'>
-              <ErrorText>{data.message}</ErrorText>
-            </div>
-          )}
-          <button type='submit'>Submit</button>
+          {data.message && <ErrorText>{data.message}</ErrorText>}
+          <SubmitButton type='submit'>Submit</SubmitButton>
         </Form>
       </section>
-    </main>
+    </AppContainer>
   )
 }
 
