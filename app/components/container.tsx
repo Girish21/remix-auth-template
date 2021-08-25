@@ -1,18 +1,19 @@
 import clsx from 'clsx'
 import * as React from 'react'
 
-const AppContainer: React.FunctionComponent<
-  React.HTMLAttributes<HTMLDivElement>
-> = (props) => {
+type Props = React.HTMLAttributes<HTMLDivElement>
+
+const commonClassName =
+  'mt-[-76px] flex-1 flex flex-col justify-center items-center'
+
+const AuthContainer: React.FunctionComponent<Props> = (props) => {
   return (
-    <main
-      {...props}
-      className={clsx([
-        'mt-[-76px] flex-1 flex flex-col justify-center items-center',
-        props.className,
-      ])}
-    />
+    <main {...props} className={clsx([commonClassName, props.className])} />
   )
 }
 
-export default AppContainer
+const MainContainer: React.FunctionComponent<Props> = (props) => {
+  return <div {...props} className={clsx([commonClassName, props.className])} />
+}
+
+export { AuthContainer, MainContainer }

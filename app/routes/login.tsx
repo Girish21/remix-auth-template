@@ -19,7 +19,7 @@ import { compareHash } from '../utils/bcrypt.server'
 import { authRoute, getUserSession } from '../utils/session.server'
 import ErrorText from '../components/error'
 import SubmitButton from '../components/submit-button'
-import AppContainer from '../components/container'
+import { AuthContainer } from '../components/container'
 import { AuthCard } from '../components/card'
 import { H2 } from '../components/title'
 
@@ -96,7 +96,7 @@ const Login = () => {
   const data = useRouteData<RouteData>()
 
   return (
-    <AppContainer>
+    <AuthContainer>
       <h1 className='sr-only'>login of awesome app!</h1>
       <AuthCard>
         <H2 className='text-center'>login</H2>
@@ -121,7 +121,7 @@ const Login = () => {
           <SubmitButton type='submit'>submit</SubmitButton>
         </Form>
       </AuthCard>
-    </AppContainer>
+    </AuthContainer>
   )
 }
 

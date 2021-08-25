@@ -6,7 +6,7 @@ import { Form, MetaFunction } from 'remix'
 import ErrorText from '../components/error'
 import Input from '../components/input'
 import SubmitButton from '../components/submit-button'
-import AppContainer from '../components/container'
+import { AuthContainer } from '../components/container'
 
 import { getLoginSession } from '../utils/auth.server'
 import { createUserIfNotExist } from '../utils/prisma.server'
@@ -88,7 +88,7 @@ const Signup = () => {
   const data = useRouteData<RouteData>()
 
   return (
-    <AppContainer>
+    <AuthContainer>
       <h1 className='sr-only'>join our awesome app!</h1>
       <AuthCard>
         <H2 className='text-center'>sign up</H2>
@@ -121,7 +121,7 @@ const Signup = () => {
           <SubmitButton type='submit'>Submit</SubmitButton>
         </Form>
       </AuthCard>
-    </AppContainer>
+    </AuthContainer>
   )
 }
 
