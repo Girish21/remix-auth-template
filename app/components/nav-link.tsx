@@ -36,24 +36,26 @@ const activeClassName = 'bg-nav-link-hover'
 
 const NavLink = (props: NavLinkType) => {
   if (isButton(props)) {
+    const { renderType: _, ...rest } = props
     return (
-      <button {...props} className={clsx([commonClassName, props.className])} />
+      <button {...rest} className={clsx([commonClassName, props.className])} />
     )
   }
 
   if (isNavLink(props)) {
+    const { renderType: _, ...rest } = props
     return (
       <NavLinkImpl
-        {...props}
+        {...rest}
         className={clsx([commonClassName, props.className])}
         activeClassName={clsx(activeClassName)}
       />
     )
   }
 
-  return (
-    <Link {...props} className={clsx([commonClassName, props.className])} />
-  )
+  const { renderType: _, ...rest } = props
+
+  return <Link {...rest} className={clsx([commonClassName, props.className])} />
 }
 
 export default NavLink
