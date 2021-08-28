@@ -7,6 +7,7 @@ import stylesUrl from './styles/global.css'
 
 import Nav from './components/nav'
 import { getUserSession } from './utils/session.server'
+import SSRTheme from './utils/theme'
 
 type RouteData = {
   isLoggedin: boolean
@@ -30,13 +31,14 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 function Document({ children }: { children: React.ReactNode }) {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning={true}>
       <head>
         <meta charSet='utf-8' />
         <link rel='icon' href='/favicon.png' type='image/png' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
         <Meta />
         <Links />
+        <SSRTheme />
       </head>
       <body>
         {children}

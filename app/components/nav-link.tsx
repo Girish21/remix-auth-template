@@ -30,7 +30,7 @@ const isNavLink = (props: NavLinkType): props is NavAnchor => {
 }
 
 const commonClassName =
-  'pb-1 text-[color:var(--text)] bg-gradient-to-r from-black to-black bg-no-repeat bg-nav-link bg-left-bottom transition-background duration-300 text-base hover:bg-nav-link-hover'
+  'pb-1 text-[color:var(--text)] bg-gradient-to-r from-[color:var(--text)] to-[color:var(--text)] bg-no-repeat bg-nav-link bg-left-bottom transition-background duration-300 text-base hover:bg-nav-link-hover'
 
 const activeClassName = 'bg-nav-link-hover'
 
