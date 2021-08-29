@@ -57,7 +57,7 @@ export default function Index() {
             >
               👋
             </span>
-            <h1 className='text-3xl leading-8 lowercase'>
+            <h1 className='text-3xl leading-8 lowercase text-[color:var(--text)]'>
               hi {data.user.firstName}
             </h1>
             <div className='col-[2/-1]'>
