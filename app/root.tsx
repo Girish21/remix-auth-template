@@ -72,6 +72,7 @@ export default function AppWithProvider() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
+  console.error(error)
   return (
     <html lang='en'>
       <head>

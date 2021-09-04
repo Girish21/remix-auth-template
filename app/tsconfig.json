@@ -16,7 +16,10 @@
     "resolveJsonModule": true,
     "noUncheckedIndexedAccess": true,
     "typeRoots": ["../types", "../node_modules/@types"],
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "paths": {
+      "~/*": ["./app/*"]
+    }
   },
-  "include": ["./**/*", "../types/global.d.ts"]
+  "include": ["remix.env.d.ts", "./**/*", "../types/global.d.ts"]
 }

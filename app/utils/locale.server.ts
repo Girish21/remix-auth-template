@@ -1,4 +1,4 @@
-import type { LoaderFunction, Request } from 'remix'
+import type { LoaderFunction } from 'remix'
 
 const withLocale = (
   request: Request,
